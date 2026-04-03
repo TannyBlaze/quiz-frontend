@@ -2,8 +2,9 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import AuthGuard from "../../../components/AuthGuard";
+import { Suspense } from "react";
 
-export default function ResultPage() {
+function ResultContent() {
     const params = useSearchParams();
     const router = useRouter();
 
@@ -28,48 +29,55 @@ export default function ResultPage() {
     }
 
     return (
-        <AuthGuard allowedRoles={["admin", "player"]}>
-            <div className="flex items-center justify-center min-h-screen bg-blue-50 p-6">
+        <div className="flex items-center justify-center min-h-screen bg-blue-50 p-6">
+            <div className="bg-white p-8 rounded-2xl shadow-lg text-center w-full max-w-md">
 
-                <div className="bg-white p-8 rounded-2xl shadow-lg text-center w-full max-w-md">
+                {/* ICON */}
+                <div className={`text-4xl mb-3 ${color}`}>
+                    <i className={`fa-solid ${icon}`}></i>
+                </div>
 
-                    {/* ICON */}
-                    <div className={`text-4xl mb-3 ${color}`}>
-                        <i className={`fa-solid ${icon}`}></i>
-                    </div>
+                {/* TITLE */}
+                <h1 className="text-2xl font-bold mb-4 text-blue-600">
+                    Quiz Result
+                </h1>
 
-                    {/* TITLE */}
-                    <h1 className="text-2xl font-bold mb-4 text-blue-600">
-                        Quiz Result
-                    </h1>
+                {/* SCORE */}
+                <p className="text-3xl font-bold text-gray-800">
+                    {score} / {total}
+                </p>
 
-                    {/* SCORE */}
-                    <p className="text-3xl font-bold text-gray-800">
-                        {score} / {total}
-                    </p>
+                {/* PERCENT */}
+                <p className={`text-xl font-semibold mt-2 ${color}`}>
+                    {percentage}%
+                </p>
 
-                    {/* PERCENT */}
-                    <p className={`text-xl font-semibold mt-2 ${color}`}>
-                        {percentage}%
-                    </p>
+                {/* MESSAGE */}
+                <p className={`mt-3 font-medium ${color}`}>
+                    {message}
+                </p>
 
-                    {/* MESSAGE */}
-                    <p className={`mt-3 font-medium ${color}`}>
-                        {message}
-                    </p>
-
-                    {/* ACTIONS */}
-                    <div className="mt-6 flex gap-3 justify-center">
-                        <button
-                            onClick={() => router.push("/quiz")}
-                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition flex items-center gap-2"
-                        >
-                            <i className="fa-solid fa-rotate"></i>
-                            Try Another
-                        </button>
-                    </div>
+                {/* ACTIONS */}
+                <div className="mt-6 flex gap-3 justify-center">
+                    <button
+                        onClick={() => router.push("/quiz")}
+                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition flex items-center gap-2"
+                    >
+                        <i className="fa-solid fa-rotate"></i>
+                        Try Another
+                    </button>
                 </div>
             </div>
+        </div>
+    );
+}
+
+export default function ResultPage() {
+    return (
+        <AuthGuard allowedRoles={["admin", "player"]}>
+            <Suspense fallback={<p className="text-center mt-10">Loading result...</p>}>
+                <ResultContent />
+            </Suspense>
         </AuthGuard>
     );
 }

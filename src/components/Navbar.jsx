@@ -16,10 +16,8 @@ export default function Navbar() {
         setMounted(true);
     }, []);
 
-    // ✅ prevent hydration mismatch
     if (!mounted) return null;
 
-    // ✅ SAFE: runs only on client AFTER mount
     let role = null;
 
     try {
