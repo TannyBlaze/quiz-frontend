@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -21,6 +20,10 @@ export default function AdminPage() {
     const [editData, setEditData] = useState({ name: "", email: "" });
 
     const loadUsers = useCallback(async () => {
+        const token = localStorage.getItem("token");
+
+        if (!token) return;
+
         try {
             const res = await fetchWithAuth("/users");
             setUsers(Array.isArray(res) ? res : []);
@@ -31,7 +34,15 @@ export default function AdminPage() {
     }, [showToast]);
 
     useEffect(() => {
-        loadUsers();
+        const timer = setTimeout(() => {
+            const token = localStorage.getItem("token");
+
+            if (!token) return;
+
+            loadUsers();
+        }, 300);
+
+        return () => clearTimeout(timer);
     }, [loadUsers]);
 
     const createUser = async () => {

@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -13,6 +12,10 @@ export default function SetPage() {
     const { showToast } = useToast();
 
     const loadCourses = useCallback(async () => {
+        const token = localStorage.getItem("token");
+
+        if (!token) return;
+
         try {
             const res = await fetchWithAuth("/courses");
             setCourses(Array.isArray(res) ? res : []);
@@ -23,7 +26,11 @@ export default function SetPage() {
     }, [showToast]);
 
     useEffect(() => {
-        loadCourses();
+        const timer = setTimeout(() => {
+            loadCourses();
+        }, 150);
+
+        return () => clearTimeout(timer);
     }, [loadCourses]);
 
     const toggleAccess = async (id) => {

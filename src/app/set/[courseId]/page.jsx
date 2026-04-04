@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -16,6 +15,10 @@ export default function CourseDetails() {
 
     // FIXED: useCallback
     const loadCourse = useCallback(async () => {
+        const token = localStorage.getItem("token");
+
+        if (!token) return;
+
         try {
             const res = await fetchWithAuth(`/courses/${courseId}`);
 
@@ -31,7 +34,15 @@ export default function CourseDetails() {
     }, [courseId, showToast]);
 
     useEffect(() => {
-        if (courseId) loadCourse();
+        const timer = setTimeout(() => {
+            const token = localStorage.getItem("token");
+
+            if (!courseId || !token) return;
+
+            loadCourse();
+        }, 300);
+
+        return () => clearTimeout(timer);
     }, [courseId, loadCourse]);
 
     const addQuestion = () => {
