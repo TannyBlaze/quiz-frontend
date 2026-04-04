@@ -20,7 +20,6 @@ export default function AdminPage() {
     const [editingUser, setEditingUser] = useState(null);
     const [editData, setEditData] = useState({ name: "", email: "" });
 
-    // LOAD USERS (FIXED WITH useCallback)
     const loadUsers = useCallback(async () => {
         try {
             const res = await fetchWithAuth("/users");
@@ -35,7 +34,6 @@ export default function AdminPage() {
         loadUsers();
     }, [loadUsers]);
 
-    // CREATE USER
     const createUser = async () => {
         if (!newUser.name || !newUser.email || !newUser.password) {
             return showToast("All fields required", "error");
@@ -46,24 +44,22 @@ export default function AdminPage() {
             body: JSON.stringify(newUser),
         });
 
-        showToast("User created ✅", "success");
+        showToast("User created", "success");
 
         setNewUser({ name: "", email: "", password: "", role: "player" });
         loadUsers();
     };
 
-    // DELETE
     const deleteUser = async (id) => {
         await fetchWithAuth(`/users/${id}`, {
             method: "DELETE",
         });
 
-        showToast("User deleted 🗑️", "success");
+        showToast("User deleted", "success");
 
         setUsers((prev) => prev.filter((u) => u._id !== id));
     };
 
-    // ROLE UPDATE
     const updateRole = async (id, role) => {
         await fetchWithAuth(`/users/${id}/role`, {
             method: "PATCH",
@@ -77,7 +73,6 @@ export default function AdminPage() {
         );
     };
 
-    // EDIT
     const startEdit = (user) => {
         setEditingUser(user._id);
         setEditData({ name: user.name, email: user.email });
@@ -89,7 +84,7 @@ export default function AdminPage() {
             body: JSON.stringify(editData),
         });
 
-        showToast("User updated ✏️", "success");
+        showToast("User updated", "success");
 
         setUsers((prev) =>
             prev.map((u) =>
@@ -104,13 +99,11 @@ export default function AdminPage() {
         <AuthGuard allowedRoles={["admin"]}>
             <div className="p-6 bg-blue-50 min-h-screen">
 
-                {/* HEADER */}
                 <h1 className="text-2xl font-bold mb-6 text-blue-600 flex items-center gap-2">
                     <i className="fa-solid fa-users-cog"></i>
                     Admin Dashboard
                 </h1>
 
-                {/* CREATE USER CARD */}
                 <div className="bg-white p-6 rounded-2xl shadow mb-6">
                     <h2 className="font-semibold mb-4 text-gray-800 flex items-center gap-2">
                         <i className="fa-solid fa-user-plus"></i>
@@ -168,7 +161,6 @@ export default function AdminPage() {
                     </button>
                 </div>
 
-                {/* USERS LIST */}
                 {users.length === 0 ? (
                     <div className="text-center text-gray-500 mt-20">
                         <i className="fa-solid fa-users text-4xl mb-3"></i>
@@ -223,7 +215,6 @@ export default function AdminPage() {
                                     </>
                                 )}
 
-                                {/* ROLE */}
                                 <div className="mt-3">
                                     <select
                                         value={user.role}
@@ -238,7 +229,7 @@ export default function AdminPage() {
                                     </select>
                                 </div>
 
-                                {/* ACTIONS */}
+                                
                                 <div className="flex gap-2 mt-4">
                                     <button
                                         onClick={() => startEdit(user)}

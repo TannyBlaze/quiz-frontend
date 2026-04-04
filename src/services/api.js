@@ -1,11 +1,9 @@
-const BASE_URL = "http://localhost:8000/api";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api";
 
-// 🔐 GET TOKEN
 const getToken = () => {
     return localStorage.getItem("token");
 };
 
-// ✅ NORMALIZE MONGODB ID (🔥 IMPORTANT)
 export const getId = (item) => {
     if (!item?._id) return Math.random().toString();
 
@@ -16,7 +14,6 @@ export const getId = (item) => {
     return item._id;
 };
 
-// 🧠 BASE FETCH WITH AUTH
 export const fetchWithAuth = async (url, options = {}) => {
     const token = getToken();
 
@@ -35,17 +32,16 @@ export const fetchWithAuth = async (url, options = {}) => {
         try {
             return JSON.parse(text);
         } catch (err) {
-            console.error("❌ Not JSON response:", text);
+            console.error("Not JSON response:", text);
             throw new Error("Server did not return JSON");
         }
 
     } catch (error) {
-        console.error("❌ Fetch Error:", error);
+        console.error("Fetch Error:", error);
         throw error;
     }
 };
 
-// 📝 REGISTER
 export const registerUser = async (data) => {
     const res = await fetchWithAuth("/register", {
         method: "POST",
@@ -60,7 +56,6 @@ export const registerUser = async (data) => {
     return res;
 };
 
-// 🔑 LOGIN
 export const loginUser = async (data) => {
     const res = await fetchWithAuth("/login", {
         method: "POST",
@@ -75,14 +70,12 @@ export const loginUser = async (data) => {
     return res;
 };
 
-// 👤 GET CURRENT USER
 export const getUser = async () => {
     return await fetchWithAuth("/user", {
         method: "GET",
     });
 };
 
-// 🚪 LOGOUT
 export const logoutUser = async () => {
     const res = await fetchWithAuth("/logout", {
         method: "POST",

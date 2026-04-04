@@ -32,7 +32,7 @@ export default function Navbar() {
     const handleLogout = async () => {
         try {
             await logoutUser();
-            showToast("Logged out successfully 👋", "success");
+            showToast("Logged out successfully", "success");
         } catch {
             showToast("Logout failed", "error");
         }
@@ -43,7 +43,6 @@ export default function Navbar() {
     return (
         <div className="sticky top-0 z-50 backdrop-blur-md bg-blue-600/90 text-white px-6 py-3 flex justify-between items-center shadow-lg border-b border-white/10">
 
-            {/* LOGO */}
             <h1
                 onClick={() => router.push("/quiz")}
                 className="font-bold text-xl cursor-pointer flex items-center gap-2 tracking-wide hover:opacity-90 transition"
@@ -52,7 +51,6 @@ export default function Navbar() {
                 Quiz App
             </h1>
 
-            {/* NAV */}
             <div className="flex items-center gap-3 flex-wrap">
 
                 {(role === "admin" || role === "player") && (

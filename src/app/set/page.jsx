@@ -50,7 +50,6 @@ export default function SetPage() {
         <AuthGuard allowedRoles={["setter", "admin"]}>
             <div className="p-6 bg-blue-50 min-h-screen">
 
-                {/* HEADER */}
                 <div className="flex justify-between items-center mb-6 flex-wrap gap-3">
                     <h1 className="text-2xl font-bold text-blue-600 flex items-center gap-2">
                         <i className="fa-solid fa-book"></i>
@@ -66,7 +65,6 @@ export default function SetPage() {
                     </button>
                 </div>
 
-                {/* EMPTY STATE */}
                 {courses.length === 0 ? (
                     <div className="text-center mt-20 text-gray-500">
                         <i className="fa-solid fa-folder-open text-4xl mb-3"></i>
@@ -79,12 +77,10 @@ export default function SetPage() {
                                 key={course._id}
                                 className="bg-white p-5 rounded-2xl shadow hover:shadow-lg transition transform hover:-translate-y-1"
                             >
-                                {/* TITLE */}
                                 <h2 className="font-semibold text-lg text-gray-800 mb-2">
                                     {course.title}
                                 </h2>
 
-                                {/* INFO */}
                                 <div className="text-sm text-gray-600 space-y-1 mb-4">
                                     <p className="flex items-center gap-2">
                                         <i className="fa-solid fa-circle-info"></i>
@@ -105,7 +101,6 @@ export default function SetPage() {
                                     </p>
                                 </div>
 
-                                {/* ACTIONS */}
                                 <div className="flex flex-wrap gap-2">
 
                                     <button

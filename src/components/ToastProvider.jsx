@@ -24,7 +24,6 @@ export default function ToastProvider({ children }) {
         <ToastContext.Provider value={{ showToast }}>
             {children}
 
-            {/* TOAST STACK */}
             <div className="fixed top-5 right-5 space-y-2 z-50">
                 {toasts.map((t) => (
                     <Toast

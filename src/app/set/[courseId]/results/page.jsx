@@ -32,13 +32,11 @@ export default function ResultsPage() {
         <AuthGuard allowedRoles={["setter"]}>
             <div className="p-6 bg-blue-50 min-h-screen">
 
-                {/* HEADER */}
                 <h1 className="text-2xl font-bold mb-6 text-blue-600 flex items-center gap-2">
                     <i className="fa-solid fa-chart-column"></i>
                     Results Overview
                 </h1>
 
-                {/* EMPTY STATE */}
                 {results.length === 0 ? (
                     <div className="text-center mt-20 text-gray-500">
                         <i className="fa-solid fa-chart-simple text-4xl mb-3"></i>
@@ -54,7 +52,6 @@ export default function ResultsPage() {
                                     key={i}
                                     className="bg-white p-5 rounded-2xl shadow hover:shadow-lg transition"
                                 >
-                                    {/* USER */}
                                     <div className="mb-3">
                                         <h2 className="font-semibold text-lg text-gray-800 flex items-center gap-2">
                                             <i className="fa-solid fa-user"></i>
@@ -67,7 +64,6 @@ export default function ResultsPage() {
                                         </p>
                                     </div>
 
-                                    {/* STATS */}
                                     <div className="text-sm text-gray-600 space-y-1 mb-4">
                                         <p className="flex items-center gap-2">
                                             <i className="fa-solid fa-hashtag"></i>
@@ -92,7 +88,6 @@ export default function ResultsPage() {
                                         </p>
                                     </div>
 
-                                    {/* PERFORMANCE BADGE */}
                                     <div
                                         className={`text-sm font-semibold px-3 py-1 rounded-full inline-flex items-center gap-2 ${isGood
                                                 ? "bg-green-100 text-green-600"

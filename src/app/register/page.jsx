@@ -43,7 +43,7 @@ export default function Register() {
                 localStorage.setItem("token", res.token);
                 localStorage.setItem("user", JSON.stringify(res.user));
 
-                showToast("Registered successfully 🚀", "success");
+                showToast("Registered successfully", "success");
                 router.push("/quiz");
             } else {
                 showToast(res.message || "Registration failed", "error");
@@ -61,13 +61,11 @@ export default function Register() {
                 onSubmit={handleSubmit}
                 className="bg-white p-8 rounded-2xl shadow-lg w-80"
             >
-                {/* TITLE */}
                 <h2 className="text-2xl mb-6 text-center font-bold text-blue-600 flex items-center justify-center gap-2">
                     <i className="fa-solid fa-user-plus"></i>
                     Register
                 </h2>
 
-                {/* NAME */}
                 <div className="relative mb-4">
                     <i className="fa-solid fa-user absolute top-3 left-3 text-gray-400"></i>
                     <input
@@ -78,7 +76,6 @@ export default function Register() {
                     />
                 </div>
 
-                {/* EMAIL */}
                 <div className="relative mb-4">
                     <i className="fa-solid fa-envelope absolute top-3 left-3 text-gray-400"></i>
                     <input
@@ -89,7 +86,6 @@ export default function Register() {
                     />
                 </div>
 
-                {/* PASSWORD */}
                 <div className="relative mb-4">
                     <i className="fa-solid fa-lock absolute top-3 left-3 text-gray-400"></i>
                     <input
@@ -112,7 +108,6 @@ export default function Register() {
                     </button>
                 </div>
 
-                {/* CONFIRM PASSWORD */}
                 <div className="relative mb-4">
                     <i className="fa-solid fa-lock absolute top-3 left-3 text-gray-400"></i>
                     <input
@@ -124,7 +119,6 @@ export default function Register() {
                     />
                 </div>
 
-                {/* BUTTON */}
                 <button
                     disabled={loading}
                     className="bg-blue-600 text-white w-full p-2 rounded hover:bg-blue-700 transition flex items-center justify-center gap-2"

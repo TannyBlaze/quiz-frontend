@@ -13,14 +13,12 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    // ✅ Redirect based on role
     const redirectUser = useCallback((role) => {
         if (role === "admin") router.push("/admin");
         else if (role === "setter") router.push("/set");
         else router.push("/quiz");
     }, [router]);
 
-    // 🔐 Auto redirect if already logged in
     useEffect(() => {
         const token = localStorage.getItem("token");
         const storedUser = localStorage.getItem("user");
@@ -51,7 +49,7 @@ export default function Login() {
                 localStorage.setItem("token", res.token);
                 localStorage.setItem("user", JSON.stringify(res.user));
 
-                showToast("Login successful 🚀", "success");
+                showToast("Login successful", "success");
                 redirectUser(res.user.role);
             } else {
                 showToast(res.message || "Login failed", "error");
@@ -70,13 +68,11 @@ export default function Login() {
                 onSubmit={handleSubmit}
                 className="bg-white p-8 rounded-2xl shadow-lg w-80"
             >
-                {/* TITLE */}
                 <h2 className="text-2xl mb-6 text-center font-bold text-blue-600 flex items-center justify-center gap-2">
                     <i className="fa-solid fa-right-to-bracket"></i>
                     Login
                 </h2>
 
-                {/* EMAIL */}
                 <div className="relative mb-4">
                     <i className="fa-solid fa-envelope absolute top-3 left-3 text-gray-400"></i>
                     <input
@@ -87,7 +83,6 @@ export default function Login() {
                     />
                 </div>
 
-                {/* PASSWORD */}
                 <div className="relative mb-4">
                     <i className="fa-solid fa-lock absolute top-3 left-3 text-gray-400"></i>
                     <input
@@ -110,7 +105,6 @@ export default function Login() {
                     </button>
                 </div>
 
-                {/* BUTTON */}
                 <button
                     disabled={loading}
                     className="bg-blue-600 text-white w-full p-2 rounded hover:bg-blue-700 transition flex items-center justify-center gap-2"

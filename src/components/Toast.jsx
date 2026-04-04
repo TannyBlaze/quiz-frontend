@@ -21,7 +21,6 @@ export default function Toast({ message, type = "info", onClose }) {
         <div
             className={`${colors[type]} text-white px-4 py-3 rounded shadow-lg flex items-center gap-2`}
         >
-            {/* Font Awesome Icon */}
             <i
                 className={`fa ${type === "success"
                         ? "fa-check-circle"

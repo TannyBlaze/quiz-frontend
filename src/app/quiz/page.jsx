@@ -28,13 +28,11 @@ export default function QuizPage() {
         <AuthGuard allowedRoles={["player"]}>
             <div className="p-6 bg-blue-50 min-h-screen">
 
-                {/* HEADER */}
                 <h1 className="text-2xl font-bold mb-6 text-blue-600 flex items-center gap-2">
                     <i className="fa-solid fa-layer-group"></i>
                     Available Quizzes
                 </h1>
 
-                {/* EMPTY STATE */}
                 {courses.length === 0 ? (
                     <div className="text-center mt-20 text-gray-500">
                         <i className="fa-solid fa-box-open text-4xl mb-3"></i>
@@ -47,12 +45,10 @@ export default function QuizPage() {
                                 key={course._id}
                                 className="bg-white p-5 rounded-2xl shadow hover:shadow-lg transition transform hover:-translate-y-1"
                             >
-                                {/* TITLE */}
                                 <h2 className="font-semibold text-lg mb-2 text-gray-800">
                                     {course.title}
                                 </h2>
 
-                                {/* INFO */}
                                 <div className="text-sm text-gray-600 space-y-1 mb-4">
                                     <p className="flex items-center gap-2">
                                         <i className="fa-solid fa-list"></i>
@@ -65,7 +61,6 @@ export default function QuizPage() {
                                     </p>
                                 </div>
 
-                                {/* ACTION */}
                                 <button
                                     onClick={() =>
                                         router.push(`/quiz/${course._id}`)

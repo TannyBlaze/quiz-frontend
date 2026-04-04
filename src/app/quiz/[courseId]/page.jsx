@@ -20,7 +20,6 @@ export default function QuizPlay() {
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState(null);
 
-    // 📥 LOAD QUIZ
     useEffect(() => {
         const init = async () => {
             try {
@@ -47,7 +46,6 @@ export default function QuizPlay() {
         if (courseId) init();
     }, [courseId]);
 
-    // 📤 SUBMIT
     const submitQuiz = useCallback(async () => {
         if (submitting) return;
         setSubmitting(true);
@@ -78,7 +76,6 @@ export default function QuizPlay() {
         }
     }, [answers, courseId, router, startTime, submitting, showToast]);
 
-    // ⏱ TIMER
     useEffect(() => {
         if (timeLeft === null) return;
 
@@ -107,7 +104,6 @@ export default function QuizPlay() {
         setAnswers(updated);
     };
 
-    // 🚫 ERROR SCREEN
     if (error) {
         return (
             <AuthGuard allowedRoles={["player"]}>
@@ -145,7 +141,6 @@ export default function QuizPlay() {
         <AuthGuard allowedRoles={["player"]}>
             <div className="min-h-screen bg-blue-50 p-6">
 
-                {/* HEADER */}
                 <div className="mb-4 flex justify-between items-center">
                     <h1 className="text-xl font-bold text-blue-600">
                         {quiz.title}
@@ -159,7 +154,6 @@ export default function QuizPlay() {
                     )}
                 </div>
 
-                {/* PROGRESS BAR */}
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
                     <div
                         className="bg-blue-600 h-2 rounded-full transition-all"
@@ -171,7 +165,6 @@ export default function QuizPlay() {
                     Question {current + 1} of {quiz.questions.length}
                 </p>
 
-                {/* QUESTION CARD */}
                 <div className="bg-white p-6 rounded-2xl shadow">
                     <p className="font-semibold text-lg mb-4">
                         {q.question}
@@ -196,7 +189,6 @@ export default function QuizPlay() {
                     })}
                 </div>
 
-                {/* NAVIGATION */}
                 <div className="flex justify-between mt-6">
                     <button
                         disabled={current === 0}

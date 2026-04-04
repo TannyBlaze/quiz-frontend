@@ -33,7 +33,7 @@ export default function CreateCourse() {
                 }),
             });
 
-            showToast("Quiz created successfully 🎉", "success");
+            showToast("Quiz created successfully", "success");
             router.push("/set");
         } catch {
             showToast("Failed to create quiz", "error");
@@ -48,13 +48,11 @@ export default function CreateCourse() {
 
                 <div className="bg-white w-full max-w-md p-8 rounded-2xl shadow-lg">
 
-                    {/* HEADER */}
                     <h1 className="text-xl font-bold mb-6 text-blue-600 flex items-center gap-2">
                         <i className="fa-solid fa-plus"></i>
                         Create Quiz
                     </h1>
 
-                    {/* TITLE */}
                     <div className="mb-4">
                         <label className="text-sm text-gray-600">Quiz Title</label>
                         <div className="relative mt-1">
@@ -68,7 +66,6 @@ export default function CreateCourse() {
                         </div>
                     </div>
 
-                    {/* TIMER */}
                     <div className="mb-4">
                         <label className="text-sm text-gray-600">Timer (seconds)</label>
                         <div className="relative mt-1">
@@ -82,7 +79,6 @@ export default function CreateCourse() {
                         </div>
                     </div>
 
-                    {/* QUESTION COUNT */}
                     <div className="mb-6">
                         <label className="text-sm text-gray-600">Question Limit</label>
                         <div className="relative mt-1">
@@ -96,7 +92,6 @@ export default function CreateCourse() {
                         </div>
                     </div>
 
-                    {/* BUTTON */}
                     <button
                         onClick={createCourse}
                         disabled={loading}

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -18,7 +19,6 @@ export default function AuthGuard({ children, allowedRoles = [] }) {
 
         const user = JSON.parse(storedUser);
 
-        // ✅ ADMIN BYPASS
         if (
             allowedRoles.length &&
             user.role !== "admin" &&
