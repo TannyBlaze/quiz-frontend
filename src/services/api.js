@@ -23,7 +23,7 @@ export const fetchWithAuth = async (url, options = {}) => {
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json",
-                ...(token && { Authorization: `Bearer ${token}` }),
+                "Authorization": `Bearer ${token || ""}`,
             }
         });
 
