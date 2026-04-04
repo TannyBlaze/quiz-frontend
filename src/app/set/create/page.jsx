@@ -8,9 +8,13 @@ import { useToast } from "../../../components/ToastProvider";
 
 export default function CreateCourse() {
     const [title, setTitle] = useState("");
-    const [timer, setTimer] = useState(60);
     const [questionCount, setQuestionCount] = useState(10);
     const [loading, setLoading] = useState(false);
+
+    // 🆕 Timer states
+    const [hours, setHours] = useState(0);
+    const [minutes, setMinutes] = useState(1);
+    const [seconds, setSeconds] = useState(0);
 
     const router = useRouter();
     const { showToast } = useToast();
@@ -27,7 +31,7 @@ export default function CreateCourse() {
                 method: "POST",
                 body: JSON.stringify({
                     title,
-                    timer,
+                    timer: hours * 3600 + minutes * 60 + seconds, // ✅ updated
                     question_count: questionCount,
                     questions: [],
                 }),
@@ -53,6 +57,7 @@ export default function CreateCourse() {
                         Create Quiz
                     </h1>
 
+                    {/* TITLE */}
                     <div className="mb-4">
                         <label className="text-sm text-gray-600">Quiz Title</label>
                         <div className="relative mt-1">
@@ -66,19 +71,44 @@ export default function CreateCourse() {
                         </div>
                     </div>
 
+                    {/* 🆕 TIMER */}
                     <div className="mb-4">
-                        <label className="text-sm text-gray-600">Timer (seconds)</label>
-                        <div className="relative mt-1">
-                            <i className="fa-solid fa-clock absolute top-3 left-3 text-gray-400"></i>
-                            <input
-                                type="number"
-                                value={timer}
-                                onChange={(e) => setTimer(Number(e.target.value))}
-                                className="w-full pl-10 p-2 border rounded-lg focus:outline-blue-500"
-                            />
+                        <label className="text-sm text-gray-600">Timer</label>
+
+                        <div className="flex gap-2 mt-1">
+                            <div className="w-1/3">
+                                <label className="text-xs text-gray-500">Hours</label>
+                                <input
+                                    type="number"
+                                    value={hours}
+                                    onChange={(e) => setHours(Number(e.target.value))}
+                                    className="w-full p-2 border rounded-lg"
+                                />
+                            </div>
+
+                            <div className="w-1/3">
+                                <label className="text-xs text-gray-500">Minutes</label>
+                                <input
+                                    type="number"
+                                    value={minutes}
+                                    onChange={(e) => setMinutes(Number(e.target.value))}
+                                    className="w-full p-2 border rounded-lg"
+                                />
+                            </div>
+
+                            <div className="w-1/3">
+                                <label className="text-xs text-gray-500">Seconds</label>
+                                <input
+                                    type="number"
+                                    value={seconds}
+                                    onChange={(e) => setSeconds(Number(e.target.value))}
+                                    className="w-full p-2 border rounded-lg"
+                                />
+                            </div>
                         </div>
                     </div>
 
+                    {/* QUESTION LIMIT */}
                     <div className="mb-6">
                         <label className="text-sm text-gray-600">Question Limit</label>
                         <div className="relative mt-1">

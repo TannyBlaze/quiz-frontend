@@ -13,7 +13,6 @@ export default function CourseDetails() {
     const [course, setCourse] = useState(null);
     const [questions, setQuestions] = useState([]);
 
-    // FIXED: useCallback
     const loadCourse = useCallback(async () => {
         const token = localStorage.getItem("token");
 
@@ -118,6 +117,7 @@ export default function CourseDetails() {
                     {course.title}
                 </h1>
 
+                {/* SETTINGS */}
                 <div className="bg-white p-5 rounded-2xl shadow mb-6">
                     <h2 className="font-semibold mb-4 text-gray-700 flex items-center gap-2">
                         <i className="fa-solid fa-gear"></i>
@@ -125,47 +125,110 @@ export default function CourseDetails() {
                     </h2>
 
                     <div className="grid md:grid-cols-3 gap-4">
-                        <input
-                            type="number"
-                            value={course.timer || 0}
-                            onChange={(e) =>
-                                setCourse((prev) => ({
-                                    ...prev,
-                                    timer: Number(e.target.value),
-                                }))
-                            }
-                            placeholder="Timer (seconds)"
-                            className="border p-2 rounded-lg focus:outline-blue-500"
-                        />
 
-                        <input
-                            type="number"
-                            value={course.question_count || ""}
-                            onChange={(e) =>
-                                setCourse((prev) => ({
-                                    ...prev,
-                                    question_count: Number(e.target.value),
-                                }))
-                            }
-                            placeholder="Question limit"
-                            className="border p-2 rounded-lg focus:outline-blue-500"
-                        />
+                        {/* TIMER */}
+                        <div>
+                            <label className="text-sm text-gray-600">Timer</label>
 
-                        <input
-                            type="number"
-                            value={course.max_attempts}
-                            onChange={(e) =>
-                                setCourse((prev) => ({
-                                    ...prev,
-                                    max_attempts: e.target.value,
-                                }))
-                            }
-                            placeholder="Max attempts"
-                            className="border p-2 rounded-lg focus:outline-blue-500"
-                        />
+                            <div className="flex gap-2 mt-1">
+
+                                <div className="w-1/3">
+                                    <label className="text-xs text-gray-500">Hours</label>
+                                    <input
+                                        type="number"
+                                        value={Math.floor((course.timer || 0) / 3600)}
+                                        onChange={(e) => {
+                                            const hours = Number(e.target.value);
+                                            const minutes = Math.floor((course.timer % 3600) / 60);
+                                            const seconds = course.timer % 60;
+
+                                            setCourse(prev => ({
+                                                ...prev,
+                                                timer: hours * 3600 + minutes * 60 + seconds
+                                            }));
+                                        }}
+                                        className="w-full border p-2 rounded-lg"
+                                    />
+                                </div>
+
+                                <div className="w-1/3">
+                                    <label className="text-xs text-gray-500">Minutes</label>
+                                    <input
+                                        type="number"
+                                        value={Math.floor((course.timer % 3600) / 60)}
+                                        onChange={(e) => {
+                                            const hours = Math.floor((course.timer || 0) / 3600);
+                                            const minutes = Number(e.target.value);
+                                            const seconds = course.timer % 60;
+
+                                            setCourse(prev => ({
+                                                ...prev,
+                                                timer: hours * 3600 + minutes * 60 + seconds
+                                            }));
+                                        }}
+                                        className="w-full border p-2 rounded-lg"
+                                    />
+                                </div>
+
+                                <div className="w-1/3">
+                                    <label className="text-xs text-gray-500">Seconds</label>
+                                    <input
+                                        type="number"
+                                        value={course.timer % 60}
+                                        onChange={(e) => {
+                                            const hours = Math.floor((course.timer || 0) / 3600);
+                                            const minutes = Math.floor((course.timer % 3600) / 60);
+                                            const seconds = Number(e.target.value);
+
+                                            setCourse(prev => ({
+                                                ...prev,
+                                                timer: hours * 3600 + minutes * 60 + seconds
+                                            }));
+                                        }}
+                                        className="w-full border p-2 rounded-lg"
+                                    />
+                                </div>
+
+                            </div>
+                        </div>
+
+                        {/* QUESTION LIMIT */}
+                        <div>
+                            <label className="text-sm text-gray-600">Question Limit</label>
+                            <input
+                                type="number"
+                                value={course.question_count || ""}
+                                onChange={(e) =>
+                                    setCourse(prev => ({
+                                        ...prev,
+                                        question_count: Number(e.target.value),
+                                    }))
+                                }
+                                className="w-full border p-2 rounded-lg mt-1"
+                            />
+                        </div>
+
+                        {/* MAX ATTEMPTS */}
+                        <div>
+                            <label className="text-sm text-gray-600">Max Attempts</label>
+                            <input
+                                type="number"
+                                value={course.max_attempts}
+                                onChange={(e) =>
+                                    setCourse(prev => ({
+                                        ...prev,
+                                        max_attempts: e.target.value,
+                                    }))
+                                }
+                                placeholder="Unlimited if empty"
+                                className="w-full border p-2 rounded-lg mt-1"
+                            />
+                        </div>
+
                     </div>
                 </div>
 
+                {/* QUESTIONS */}
                 {questions.map((q, i) => (
                     <div
                         key={i}

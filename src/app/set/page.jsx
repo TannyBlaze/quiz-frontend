@@ -104,7 +104,9 @@ export default function SetPage() {
 
                                     <p className="flex items-center gap-2">
                                         <i className="fa-solid fa-clock"></i>
-                                        {course.timer || 0}s Timer
+                                        {Math.floor((course.timer || 0) / 3600)}h{" "}
+                                        {Math.floor(((course.timer || 0) % 3600) / 60)}m{" "}
+                                        {(course.timer || 0) % 60}s
                                     </p>
                                 </div>
 
