@@ -5,11 +5,29 @@ import AuthGuard from "../../components/AuthGuard";
 import { fetchWithAuth } from "../../services/api";
 import { useRouter } from "next/navigation";
 import { useToast } from "../../components/ToastProvider";
+import SearchBar from "../../components/SearchBar";
 
 export default function QuizPage() {
     const [courses, setCourses] = useState([]);
     const router = useRouter();
     const { showToast } = useToast();
+    const [search, setSearch] = useState("");
+
+    const formatTime = (seconds) => {
+        if (!seconds) return "No Timer";
+
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = seconds % 60;
+
+        return [
+            h ? `${h}h` : null,
+            m ? `${m}m` : null,
+            s ? `${s}s` : null,
+        ]
+            .filter(Boolean)
+            .join(" ");
+    };
 
     useEffect(() => {
         const load = async () => {
@@ -27,7 +45,11 @@ export default function QuizPage() {
     return (
         <AuthGuard allowedRoles={["player"]}>
             <div className="p-6 bg-blue-50 min-h-screen">
-
+                <SearchBar
+                    value={search}
+                    onChange={setSearch}
+                    placeholder="Search courses..."
+                />
                 <h1 className="text-2xl font-bold mb-6 text-blue-600 flex items-center gap-2">
                     <i className="fa-solid fa-layer-group"></i>
                     Available Quizzes
@@ -40,7 +62,11 @@ export default function QuizPage() {
                     </div>
                 ) : (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {courses.map((course) => (
+                            {courses
+                                .filter((course) =>
+                                    course.title.toLowerCase().includes(search.toLowerCase())
+                                )
+                                .map((course) => (
                             <div
                                 key={course._id}
                                 className="bg-white p-5 rounded-2xl shadow hover:shadow-lg transition transform hover:-translate-y-1"
@@ -57,7 +83,7 @@ export default function QuizPage() {
 
                                     <p className="flex items-center gap-2">
                                         <i className="fa-solid fa-clock"></i>
-                                        {course.timer}s Timer
+                                        {formatTime(course.timer)}
                                     </p>
                                 </div>
 

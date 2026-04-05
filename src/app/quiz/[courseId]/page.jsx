@@ -20,6 +20,24 @@ export default function QuizPlay() {
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState(null);
 
+    const formatTime = (seconds) => {
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = seconds % 60;
+
+        return [
+            h.toString().padStart(2, "0"),
+            m.toString().padStart(2, "0"),
+            s.toString().padStart(2, "0"),
+        ].join(":");
+    };
+
+    const getTimerColor = () => {
+        if (timeLeft <= 30) return "text-red-500";
+        if (timeLeft <= 120) return "text-yellow-500";
+        return "text-green-500";
+    };
+
     useEffect(() => {
         const init = async () => {
             try {
@@ -97,7 +115,7 @@ export default function QuizPlay() {
         const updated = [...answers];
 
         updated[current] = {
-            index: quiz.questions[current].index,
+            original_index: quiz.questions[current].original_index,
             value: selected,
         };
 
@@ -147,9 +165,9 @@ export default function QuizPlay() {
                     </h1>
 
                     {timeLeft !== null && (
-                        <div className="flex items-center gap-2 text-red-500 font-semibold">
+                        <div className={`flex items-center gap-2 font-semibold ${getTimerColor()}`}>
                             <i className="fa-solid fa-clock"></i>
-                            {timeLeft}s
+                            {formatTime(timeLeft)}
                         </div>
                     )}
                 </div>
@@ -179,8 +197,8 @@ export default function QuizPlay() {
                                 key={i}
                                 onClick={() => selectAnswer(i)}
                                 className={`w-full text-left p-3 mb-2 rounded-lg border transition ${selected
-                                        ? "bg-blue-600 text-white border-blue-600"
-                                        : "hover:bg-blue-50"
+                                    ? "bg-blue-600 text-white border-blue-600"
+                                    : "hover:bg-blue-50"
                                     }`}
                             >
                                 {opt}

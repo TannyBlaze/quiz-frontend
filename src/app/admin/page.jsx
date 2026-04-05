@@ -4,10 +4,12 @@ import { useEffect, useState, useCallback } from "react";
 import AuthGuard from "../../components/AuthGuard";
 import { fetchWithAuth } from "../../services/api";
 import { useToast } from "../../components/ToastProvider";
+import SearchBar from "../../components/SearchBar";
 
 export default function AdminPage() {
     const [users, setUsers] = useState([]);
     const { showToast } = useToast();
+    const [search, setSearch] = useState("");
 
     const [newUser, setNewUser] = useState({
         name: "",
@@ -109,7 +111,11 @@ export default function AdminPage() {
     return (
         <AuthGuard allowedRoles={["admin"]}>
             <div className="p-6 bg-blue-50 min-h-screen">
-
+                <SearchBar
+                    value={search}
+                    onChange={setSearch}
+                    placeholder="Search users by name or email..."
+                />
                 <h1 className="text-2xl font-bold mb-6 text-blue-600 flex items-center gap-2">
                     <i className="fa-solid fa-users-cog"></i>
                     Admin Dashboard

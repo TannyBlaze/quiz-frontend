@@ -5,11 +5,13 @@ import AuthGuard from "../../components/AuthGuard";
 import { fetchWithAuth } from "../../services/api";
 import { useRouter } from "next/navigation";
 import { useToast } from "../../components/ToastProvider";
+import SearchBar from "../../components/SearchBar";
 
 export default function SetPage() {
     const [courses, setCourses] = useState([]);
     const router = useRouter();
     const { showToast } = useToast();
+    const [search, setSearch] = useState("");
 
     const loadCourses = useCallback(async () => {
         const token = localStorage.getItem("token");
@@ -56,7 +58,11 @@ export default function SetPage() {
     return (
         <AuthGuard allowedRoles={["setter", "admin"]}>
             <div className="p-6 bg-blue-50 min-h-screen">
-
+                <SearchBar
+                    value={search}
+                    onChange={setSearch}
+                    placeholder="Search quizzes..."
+                />
                 <div className="flex justify-between items-center mb-6 flex-wrap gap-3">
                     <h1 className="text-2xl font-bold text-blue-600 flex items-center gap-2">
                         <i className="fa-solid fa-book"></i>
@@ -79,7 +85,11 @@ export default function SetPage() {
                     </div>
                 ) : (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {courses.map((course) => (
+                            {courses
+                                .filter((course) =>
+                                    course.title.toLowerCase().includes(search.toLowerCase())
+                                )
+                                .map((course) => (
                             <div
                                 key={course._id}
                                 className="bg-white p-5 rounded-2xl shadow hover:shadow-lg transition transform hover:-translate-y-1"

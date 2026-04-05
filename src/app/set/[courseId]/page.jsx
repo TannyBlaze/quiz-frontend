@@ -81,10 +81,17 @@ export default function CourseDetails() {
     };
 
     const saveChanges = async () => {
+        // ✅ Optional validation (added)
+        if (!course.title.trim()) {
+            showToast("Title cannot be empty", "error");
+            return;
+        }
+
         try {
             await fetchWithAuth(`/courses/${courseId}`, {
                 method: "PUT",
                 body: JSON.stringify({
+                    title: course.title, // ✅ added
                     questions,
                     timer: course.timer,
                     question_count: course.question_count,
@@ -112,10 +119,17 @@ export default function CourseDetails() {
         <AuthGuard allowedRoles={["setter"]}>
             <div className="p-6 bg-blue-50 min-h-screen">
 
-                <h1 className="text-2xl font-bold mb-6 text-blue-600 flex items-center gap-2">
-                    <i className="fa-solid fa-pen-to-square"></i>
-                    {course.title}
-                </h1>
+                {/* ✅ Title is now editable */}
+                <input
+                    value={course.title}
+                    onChange={(e) =>
+                        setCourse(prev => ({
+                            ...prev,
+                            title: e.target.value
+                        }))
+                    }
+                    className="text-2xl font-bold mb-6 text-blue-600 bg-transparent border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full"
+                />
 
                 {/* SETTINGS */}
                 <div className="bg-white p-5 rounded-2xl shadow mb-6">
@@ -124,15 +138,15 @@ export default function CourseDetails() {
                         Quiz Settings
                     </h2>
 
-                    <div className="grid md:grid-cols-3 gap-4">
+                    <div className="grid md:grid-cols-3 gap-4 items-stretch">
 
                         {/* TIMER */}
-                        <div>
-                            <label className="text-sm text-gray-600">Timer</label>
+                        <div className="flex flex-col justify-between">
+                            <label className="text-sm text-gray-600 mb-1">Timer</label>
 
-                            <div className="flex gap-2 mt-1">
+                            <div className="flex gap-2">
 
-                                <div className="w-1/3">
+                                <div className="flex-1">
                                     <label className="text-xs text-gray-500">Hours</label>
                                     <input
                                         type="number"
@@ -151,7 +165,7 @@ export default function CourseDetails() {
                                     />
                                 </div>
 
-                                <div className="w-1/3">
+                                <div className="flex-1">
                                     <label className="text-xs text-gray-500">Minutes</label>
                                     <input
                                         type="number"
@@ -170,7 +184,7 @@ export default function CourseDetails() {
                                     />
                                 </div>
 
-                                <div className="w-1/3">
+                                <div className="flex-1">
                                     <label className="text-xs text-gray-500">Seconds</label>
                                     <input
                                         type="number"
@@ -193,8 +207,8 @@ export default function CourseDetails() {
                         </div>
 
                         {/* QUESTION LIMIT */}
-                        <div>
-                            <label className="text-sm text-gray-600">Question Limit</label>
+                        <div className="flex flex-col justify-between">
+                            <label className="text-sm text-gray-600 mb-1">Question Limit</label>
                             <input
                                 type="number"
                                 value={course.question_count || ""}
@@ -204,13 +218,13 @@ export default function CourseDetails() {
                                         question_count: Number(e.target.value),
                                     }))
                                 }
-                                className="w-full border p-2 rounded-lg mt-1"
+                                className="w-full border p-2 rounded-lg"
                             />
                         </div>
 
                         {/* MAX ATTEMPTS */}
-                        <div>
-                            <label className="text-sm text-gray-600">Max Attempts</label>
+                        <div className="flex flex-col justify-between">
+                            <label className="text-sm text-gray-600 mb-1">Max Attempts</label>
                             <input
                                 type="number"
                                 value={course.max_attempts}
@@ -221,7 +235,7 @@ export default function CourseDetails() {
                                     }))
                                 }
                                 placeholder="Unlimited if empty"
-                                className="w-full border p-2 rounded-lg mt-1"
+                                className="w-full border p-2 rounded-lg"
                             />
                         </div>
 
