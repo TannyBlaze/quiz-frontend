@@ -1,3 +1,5 @@
+import { triggerToast } from "../components/ToastProvider";
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api";
 
 const getToken = () => {
@@ -28,13 +30,34 @@ export const fetchWithAuth = async (url, options = {}) => {
         });
 
         const text = await res.text();
+        let data;
 
         try {
-            return JSON.parse(text);
+            data = JSON.parse(text);
         } catch (err) {
             console.error("Not JSON response:", text);
             throw new Error("Server did not return JSON");
         }
+
+        if (res.status === 401) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+
+            triggerToast(
+                data.message || "Session expired, please login again",
+                "error"
+            );
+
+            setTimeout(() => {
+                if (typeof window !== "undefined") {
+                    window.location.href = "/login";
+                }
+            }, 1500);
+
+            throw new Error(data.message || "Unauthorized");
+        }
+
+        return data;
 
     } catch (error) {
         console.error("Fetch Error:", error);
