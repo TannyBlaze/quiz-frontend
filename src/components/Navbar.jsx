@@ -11,23 +11,29 @@ export default function Navbar() {
     const { showToast } = useToast();
 
     const [mounted, setMounted] = useState(false);
+    const [userName, setUserName] = useState("");
+    const [role, setRole] = useState(null);
 
     useEffect(() => {
         setMounted(true);
     }, []);
 
-    if (!mounted) return null;
+    useEffect(() => {
+        try {
+            const storedUser = localStorage.getItem("user");
 
-    let role = null;
-
-    try {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            role = JSON.parse(storedUser).role;
+            if (storedUser) {
+                const parsed = JSON.parse(storedUser);
+                setRole(parsed.role || null);
+                setUserName(parsed.name || "");
+            }
+        } catch {
+            setRole(null);
+            setUserName("");
         }
-    } catch {
-        role = null;
-    }
+    }, []);
+
+    if (!mounted) return null;
 
     const handleLogout = async () => {
         try {
@@ -52,6 +58,13 @@ export default function Navbar() {
             </h1>
 
             <div className="flex items-center gap-3 flex-wrap">
+
+                {userName && (
+                    <div className="px-3 py-2 rounded-xl bg-white/10 text-sm font-medium flex items-center gap-2">
+                        <i className="fa-solid fa-user"></i>
+                        {userName}
+                    </div>
+                )}
 
                 {(role === "admin" || role === "player") && (
                     <button

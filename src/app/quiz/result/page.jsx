@@ -14,16 +14,16 @@ function ResultContent() {
     const percentage = total ? Math.round((score / total) * 100) : 0;
 
     let color = "text-red-500";
-    let message = "Try again";
+    let message = "Fail";
     let icon = "fa-face-frown";
 
     if (percentage >= 80) {
         color = "text-green-600";
-        message = "You killed it!";
+        message = "Pass";
         icon = "fa-trophy";
     } else if (percentage >= 50) {
         color = "text-yellow-500";
-        message = "Not bad!";
+        message = "Fair";
         icon = "fa-thumbs-up";
     }
 
@@ -56,8 +56,8 @@ function ResultContent() {
                         onClick={() => router.push("/quiz")}
                         className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition flex items-center gap-2"
                     >
-                        <i className="fa-solid fa-rotate"></i>
-                        Try Again
+                        <i className="fa-solid fa-arrow-left"></i>
+                        Back To Quizzes
                     </button>
                 </div>
             </div>
