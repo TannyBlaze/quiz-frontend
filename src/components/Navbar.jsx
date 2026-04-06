@@ -119,8 +119,8 @@ export default function Navbar() {
                     onClick={() => navigate("/quiz")}
                     className="font-bold text-lg md:text-xl cursor-pointer flex items-center gap-2"
                 >
-                    <i className="fa-solid fa-bolt text-yellow-300"></i>
-                    Quiz App
+                    <i className="fa-solid fa-brain"></i>
+                    TBQOptions
                 </h1>
 
                 <div className="hidden md:flex items-center gap-3">

@@ -11,7 +11,6 @@ export default function CreateCourse() {
     const [questionCount, setQuestionCount] = useState(10);
     const [loading, setLoading] = useState(false);
 
-    // 🆕 Timer states
     const [hours, setHours] = useState(0);
     const [minutes, setMinutes] = useState(1);
     const [seconds, setSeconds] = useState(0);
@@ -31,7 +30,7 @@ export default function CreateCourse() {
                 method: "POST",
                 body: JSON.stringify({
                     title,
-                    timer: hours * 3600 + minutes * 60 + seconds, // ✅ updated
+                    timer: hours * 3600 + minutes * 60 + seconds,
                     question_count: questionCount,
                     questions: [],
                 }),
@@ -57,7 +56,6 @@ export default function CreateCourse() {
                         Create Quiz
                     </h1>
 
-                    {/* TITLE */}
                     <div className="mb-4">
                         <label className="text-sm text-gray-600">Quiz Title</label>
                         <div className="relative mt-1">
@@ -71,7 +69,6 @@ export default function CreateCourse() {
                         </div>
                     </div>
 
-                    {/* 🆕 TIMER */}
                     <div className="mb-4">
                         <label className="text-sm text-gray-600">Timer</label>
 
@@ -108,7 +105,6 @@ export default function CreateCourse() {
                         </div>
                     </div>
 
-                    {/* QUESTION LIMIT */}
                     <div className="mb-6">
                         <label className="text-sm text-gray-600">Question Limit</label>
                         <div className="relative mt-1">

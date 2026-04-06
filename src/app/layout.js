@@ -4,6 +4,7 @@ import ClientLayout from "../components/ClientLayout";
 export default function RootLayout({ children }) {
   return (
     <html>
+      <title>Tannyblaze Quiz Options</title>
       <head>
         <Script
           src="https://cdn.tailwindcss.com"

@@ -114,7 +114,7 @@ export default function AdminPage() {
                 <SearchBar
                     value={search}
                     onChange={setSearch}
-                    placeholder="Search users by name or email..."
+                    placeholder="Search users..."
                 />
                 <h1 className="text-2xl font-bold mb-6 text-blue-600 flex items-center gap-2">
                     <i className="fa-solid fa-users-cog"></i>
@@ -185,7 +185,12 @@ export default function AdminPage() {
                     </div>
                 ) : (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {users.map((user) => (
+                            {users
+                                .filter((user) =>
+                                    user.name.toLowerCase().includes(search.toLowerCase()) ||
+                                    user.email.toLowerCase().includes(search.toLowerCase())
+                                )
+                                .map((user) => (
                             <div
                                 key={user._id}
                                 className="bg-white p-5 rounded-2xl shadow hover:shadow-lg transition"

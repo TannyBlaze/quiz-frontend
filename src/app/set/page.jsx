@@ -61,7 +61,7 @@ export default function SetPage() {
                 <SearchBar
                     value={search}
                     onChange={setSearch}
-                    placeholder="Search quizzes..."
+                    placeholder="Search courses..."
                 />
                 <div className="flex justify-between items-center mb-6 flex-wrap gap-3">
                     <h1 className="text-2xl font-bold text-blue-600 flex items-center gap-2">
@@ -106,7 +106,11 @@ export default function SetPage() {
 
                                     <p className="flex items-center gap-2">
                                         <i className="fa-solid fa-list"></i>
-                                        {course.questions?.length || 0} Questions
+                                                {
+                                                    (course.questions?.length || 0) === 0 ? "No Questions"
+                                                    : (course.questions?.length || 0) === 1 ? "1 Question"
+                                                    : `${course.questions?.length} Questions`
+                                                }
                                         {course.question_count
                                             ? ` (Limit ${course.question_count})`
                                             : ""}

@@ -6,10 +6,11 @@ import AuthGuard from "../../../components/AuthGuard";
 import { fetchWithAuth } from "../../../services/api";
 import { useToast } from "../../../components/ToastProvider";
 
+
 export default function CourseDetails() {
     const { courseId } = useParams();
     const { showToast } = useToast();
-
+    const [attemptMode, setAttemptMode] = useState("unlimited");
     const [course, setCourse] = useState(null);
     const [questions, setQuestions] = useState([]);
 
@@ -25,6 +26,12 @@ export default function CourseDetails() {
                 ...res,
                 max_attempts: res.max_attempts ?? "",
             });
+
+            setAttemptMode(
+                res.max_attempts === null || res.max_attempts === undefined
+                    ? "unlimited"
+                    : "limited"
+            );
 
             setQuestions(res.questions || []);
         } catch {
@@ -81,7 +88,6 @@ export default function CourseDetails() {
     };
 
     const saveChanges = async () => {
-        // ✅ Optional validation (added)
         if (!course.title.trim()) {
             showToast("Title cannot be empty", "error");
             return;
@@ -91,7 +97,7 @@ export default function CourseDetails() {
             await fetchWithAuth(`/courses/${courseId}`, {
                 method: "PUT",
                 body: JSON.stringify({
-                    title: course.title, // ✅ added
+                    title: course.title,
                     questions,
                     timer: course.timer,
                     question_count: course.question_count,
@@ -119,7 +125,6 @@ export default function CourseDetails() {
         <AuthGuard allowedRoles={["setter"]}>
             <div className="p-6 bg-blue-50 min-h-screen">
 
-                {/* ✅ Title is now editable */}
                 <input
                     value={course.title}
                     onChange={(e) =>
@@ -131,7 +136,6 @@ export default function CourseDetails() {
                     className="text-2xl font-bold mb-6 text-blue-600 bg-transparent border-b border-gray-300 focus:outline-none focus:border-blue-500 w-full"
                 />
 
-                {/* SETTINGS */}
                 <div className="bg-white p-5 rounded-2xl shadow mb-6">
                     <h2 className="font-semibold mb-4 text-gray-700 flex items-center gap-2">
                         <i className="fa-solid fa-gear"></i>
@@ -140,7 +144,6 @@ export default function CourseDetails() {
 
                     <div className="grid md:grid-cols-3 gap-4 items-stretch">
 
-                        {/* TIMER */}
                         <div className="flex flex-col justify-between">
                             <label className="text-sm text-gray-600 mb-1">Timer</label>
 
@@ -206,7 +209,6 @@ export default function CourseDetails() {
                             </div>
                         </div>
 
-                        {/* QUESTION LIMIT */}
                         <div className="flex flex-col justify-between">
                             <label className="text-sm text-gray-600 mb-1">Question Limit</label>
                             <input
@@ -222,11 +224,76 @@ export default function CourseDetails() {
                             />
                         </div>
 
-                        {/* MAX ATTEMPTS */}
                         <div className="flex flex-col justify-between">
-                            <label className="text-sm text-gray-600 mb-1">Max Attempts</label>
+                            <label className="text-sm text-gray-600 mb-2">Max Attempts</label>
+
+                            {/* Radio Options */}
+                            <div className="flex items-center gap-6 mb-2">
+
+                                {/* Unlimited */}
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="attemptMode"
+                                        checked={attemptMode === "unlimited"}
+                                        onChange={() => {
+                                            setAttemptMode("unlimited");
+                                            setCourse(prev => ({
+                                                ...prev,
+                                                max_attempts: "",
+                                            }));
+                                        }}
+                                        className="hidden"
+                                    />
+
+                                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition
+                                            ${attemptMode === "unlimited"
+                                            ? "border-blue-600"
+                                            : "border-gray-400"}
+                                        `}>
+                                        {attemptMode === "unlimited" && (
+                                            <div className="w-2.5 h-2.5 bg-blue-600 rounded-full"></div>
+                                        )}
+                                    </div>
+
+                                    <span className="text-sm text-gray-700">Unlimited</span>
+                                </label>
+
+
+                                {/* Limited */}
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="attemptMode"
+                                        checked={attemptMode === "limited"}
+                                        onChange={() => {
+                                            setAttemptMode("limited");
+                                            setCourse(prev => ({
+                                                ...prev,
+                                                max_attempts: prev.max_attempts || 1,
+                                            }));
+                                        }}
+                                        className="hidden"
+                                    />
+
+                                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition
+                                            ${attemptMode === "limited"
+                                            ? "border-blue-600"
+                                            : "border-gray-400"}
+                                        `}>
+                                        {attemptMode === "limited" && (
+                                            <div className="w-2.5 h-2.5 bg-blue-600 rounded-full"></div>
+                                        )}
+                                    </div>
+
+                                    <span className="text-sm text-gray-700">Limited</span>
+                                </label>
+
+                            </div>
+
                             <input
                                 type="number"
+                                disabled={attemptMode === "unlimited"}
                                 value={course.max_attempts}
                                 onChange={(e) =>
                                     setCourse(prev => ({
@@ -234,15 +301,17 @@ export default function CourseDetails() {
                                         max_attempts: e.target.value,
                                     }))
                                 }
-                                placeholder="Unlimited if empty"
-                                className="w-full border p-2 rounded-lg"
+                                placeholder="Enter max attempts"
+                                className={`w-full border p-2 rounded-lg ${attemptMode === "unlimited"
+                                        ? "bg-gray-100 cursor-not-allowed"
+                                        : ""
+                                    }`}
                             />
                         </div>
 
                     </div>
                 </div>
 
-                {/* QUESTIONS */}
                 {questions.map((q, i) => (
                     <div
                         key={i}

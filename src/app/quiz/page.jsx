@@ -76,10 +76,14 @@ export default function QuizPage() {
                                 </h2>
 
                                 <div className="text-sm text-gray-600 space-y-1 mb-4">
-                                    <p className="flex items-center gap-2">
-                                        <i className="fa-solid fa-list"></i>
-                                        {course.question_count} Questions
-                                    </p>
+                                            <p className="flex items-center gap-2">
+                                                <i className="fa-solid fa-list"></i>
+                                                {
+                                                    course.question_count === 0 ? "No Questions"
+                                                    : course.question_count === 1 ? "1 Question"
+                                                    : `${course.question_count} Questions`
+                                                }
+                                            </p>
 
                                     <p className="flex items-center gap-2">
                                         <i className="fa-solid fa-clock"></i>

@@ -5,10 +5,12 @@ import { useParams } from "next/navigation";
 import AuthGuard from "../../../../components/AuthGuard";
 import { fetchWithAuth } from "../../../../services/api";
 import { useToast } from "../../../../components/ToastProvider";
+import SearchBar from "../../../../components/SearchBar";
 
 export default function ResultsPage() {
     const { courseId } = useParams();
     const { showToast } = useToast();
+    const [search, setSearch] = useState("");
 
     const [results, setResults] = useState([]);
 
@@ -31,7 +33,11 @@ export default function ResultsPage() {
     return (
         <AuthGuard allowedRoles={["setter"]}>
             <div className="p-6 bg-blue-50 min-h-screen">
-
+                <SearchBar
+                    value={search}
+                    onChange={setSearch}
+                    placeholder="Search results..."
+                />
                 <h1 className="text-2xl font-bold mb-6 text-blue-600 flex items-center gap-2">
                     <i className="fa-solid fa-chart-column"></i>
                     Results Overview
@@ -44,7 +50,18 @@ export default function ResultsPage() {
                     </div>
                 ) : (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {results.map((r, i) => {
+                            {results
+                                .filter((r) => {
+                                    const term = search.toLowerCase();
+
+                                    return (
+                                        r.user?.toLowerCase().includes(term) ||
+                                        r.email?.toLowerCase().includes(term) ||
+                                        r.score?.toString().includes(term) ||
+                                        r.percentage?.toString().includes(term)
+                                    );
+                                })
+                                .map((r, i) => {
                             const isGood = r.percentage >= 60;
 
                             return (
