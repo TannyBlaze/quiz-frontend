@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import AuthGuard from "../../../components/AuthGuard";
 import { fetchWithAuth } from "../../../services/api";
 import { useToast } from "../../../components/ToastProvider";
-
+import { useRouter } from "next/navigation";
 
 export default function CourseDetails() {
     const { courseId } = useParams();
@@ -13,6 +13,9 @@ export default function CourseDetails() {
     const [attemptMode, setAttemptMode] = useState("unlimited");
     const [course, setCourse] = useState(null);
     const [questions, setQuestions] = useState([]);
+    const [initialData, setInitialData] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const router = useRouter();
 
     const loadCourse = useCallback(async () => {
         const token = localStorage.getItem("token");
@@ -22,10 +25,13 @@ export default function CourseDetails() {
         try {
             const res = await fetchWithAuth(`/courses/${courseId}`);
 
-            setCourse({
+            const formatted = {
                 ...res,
                 max_attempts: res.max_attempts ?? "",
-            });
+            };
+
+            setCourse(formatted);
+            setInitialData(JSON.stringify(formatted));
 
             setAttemptMode(
                 res.max_attempts === null || res.max_attempts === undefined
@@ -50,6 +56,33 @@ export default function CourseDetails() {
 
         return () => clearTimeout(timer);
     }, [courseId, loadCourse]);
+
+    const hasChanges = () => {
+        const currentData = JSON.stringify({
+            ...course,
+            questions
+        });
+        return currentData !== initialData;
+    };
+
+    const handleBack = () => {
+        if (hasChanges()) {
+            setShowModal(true);
+        } else {
+            router.push("/set");
+        }
+    };
+
+    const confirmLeave = () => {
+        setShowModal(false);
+        router.push("/set");
+    };
+
+    const saveAndLeave = async () => {
+        await saveChanges();
+        setShowModal(false);
+        router.push("/set");
+    };
 
     const addQuestion = () => {
         setQuestions((prev) => [
@@ -108,6 +141,11 @@ export default function CourseDetails() {
                 }),
             });
 
+            setInitialData(JSON.stringify({
+                ...course,
+                questions
+            }));
+
             showToast("Changes saved successfully", "success");
         } catch {
             showToast("Failed to save changes", "error");
@@ -124,6 +162,14 @@ export default function CourseDetails() {
     return (
         <AuthGuard allowedRoles={["setter"]}>
             <div className="p-6 bg-blue-50 min-h-screen">
+
+                <button
+                    onClick={handleBack}
+                    className="mb-4 bg-blue-100 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-200 transition flex items-center gap-2"
+                >
+                    <i className="fa-solid fa-arrow-left"></i>
+                    Back to Courses
+                </button>
 
                 <input
                     value={course.title}
@@ -227,10 +273,8 @@ export default function CourseDetails() {
                         <div className="flex flex-col justify-between">
                             <label className="text-sm text-gray-600 mb-2">Max Attempts</label>
 
-                            {/* Radio Options */}
                             <div className="flex items-center gap-6 mb-2">
 
-                                {/* Unlimited */}
                                 <label className="flex items-center gap-2 cursor-pointer">
                                     <input
                                         type="radio"
@@ -259,8 +303,6 @@ export default function CourseDetails() {
                                     <span className="text-sm text-gray-700">Unlimited</span>
                                 </label>
 
-
-                                {/* Limited */}
                                 <label className="flex items-center gap-2 cursor-pointer">
                                     <input
                                         type="radio"
@@ -382,6 +424,43 @@ export default function CourseDetails() {
                         Save Changes
                     </button>
                 </div>
+
+                {showModal && (
+                    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+                        <div className="bg-white p-6 rounded-2xl shadow-lg w-[90%] max-w-md">
+                            <h3 className="text-lg font-semibold mb-3 text-gray-800">
+                                Unsaved Changes
+                            </h3>
+
+                            <p className="text-gray-600 mb-5">
+                                You have unsaved changes. Are you sure you want to leave?
+                            </p>
+
+                            <div className="flex justify-end gap-3">
+                                <button
+                                    onClick={() => setShowModal(false)}
+                                    className="px-4 py-2 rounded-lg bg-gray-200"
+                                >
+                                    Cancel
+                                </button>
+
+                                <button
+                                    onClick={confirmLeave}
+                                    className="px-4 py-2 rounded-lg bg-red-500 text-white"
+                                >
+                                    Leave
+                                </button>
+
+                                <button
+                                    onClick={saveAndLeave}
+                                    className="px-4 py-2 rounded-lg bg-blue-600 text-white"
+                                >
+                                    Save & Leave
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </AuthGuard>
     );
