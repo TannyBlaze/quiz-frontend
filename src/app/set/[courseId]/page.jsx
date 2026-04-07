@@ -31,7 +31,11 @@ export default function CourseDetails() {
             };
 
             setCourse(formatted);
-            setInitialData(JSON.stringify(formatted));
+
+            setInitialData(JSON.stringify({
+                ...formatted,
+                questions: formatted.questions || []
+            }));
 
             setAttemptMode(
                 res.max_attempts === null || res.max_attempts === undefined
@@ -55,7 +59,9 @@ export default function CourseDetails() {
         }, 300);
 
         return () => clearTimeout(timer);
-    }, [courseId, loadCourse]);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [courseId]);
 
     const hasChanges = () => {
         const currentData = JSON.stringify({
@@ -163,13 +169,27 @@ export default function CourseDetails() {
         <AuthGuard allowedRoles={["setter"]}>
             <div className="p-6 bg-blue-50 min-h-screen">
 
-                <button
-                    onClick={handleBack}
-                    className="mb-4 bg-blue-100 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-200 transition flex items-center gap-2"
-                >
-                    <i className="fa-solid fa-arrow-left"></i>
-                    Back to Courses
-                </button>
+                <div className="sticky top-16 z-50 bg-blue-50 border-b border-gray-200 rounded-full shadow-sm backdrop-blur px-6 py-3 flex flex-wrap justify-between items-center gap-3">
+
+                    <button
+                        onClick={handleBack}
+                        className="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-200 transition flex items-center gap-2"
+                    >
+                        <i className="fa-solid fa-arrow-left"></i>
+                        Back to Courses
+                    </button>
+
+                    <button
+                        onClick={saveChanges}
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
+                    >
+                        <i className="fa-solid fa-floppy-disk"></i>
+                        Save Changes
+                    </button>
+
+                </div>
+
+                <div className="mt-4">
 
                 <input
                     value={course.title}
@@ -345,8 +365,8 @@ export default function CourseDetails() {
                                 }
                                 placeholder="Enter max attempts"
                                 className={`w-full border p-2 rounded-lg ${attemptMode === "unlimited"
-                                        ? "bg-gray-100 cursor-not-allowed"
-                                        : ""
+                                    ? "bg-gray-100 cursor-not-allowed"
+                                    : ""
                                     }`}
                             />
                         </div>
@@ -415,14 +435,6 @@ export default function CourseDetails() {
                         <i className="fa-solid fa-plus"></i>
                         Add Question
                     </button>
-
-                    <button
-                        onClick={saveChanges}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
-                    >
-                        <i className="fa-solid fa-floppy-disk"></i>
-                        Save Changes
-                    </button>
                 </div>
 
                 {showModal && (
@@ -460,7 +472,8 @@ export default function CourseDetails() {
                             </div>
                         </div>
                     </div>
-                )}
+                    )}
+                </div>
             </div>
         </AuthGuard>
     );

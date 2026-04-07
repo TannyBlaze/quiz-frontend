@@ -6,13 +6,18 @@ import AuthGuard from "../../../../components/AuthGuard";
 import { fetchWithAuth } from "../../../../services/api";
 import { useToast } from "../../../../components/ToastProvider";
 import SearchBar from "../../../../components/SearchBar";
+import { useRouter } from "next/navigation";
 
 export default function ResultsPage() {
     const { courseId } = useParams();
     const { showToast } = useToast();
     const [search, setSearch] = useState("");
-
+    const router = useRouter();
     const [results, setResults] = useState([]);
+
+    const handleBack = () => {
+            router.push("/set");
+    };
 
     useEffect(() => {
         const load = async () => {
@@ -33,6 +38,13 @@ export default function ResultsPage() {
     return (
         <AuthGuard allowedRoles={["setter"]}>
             <div className="p-6 bg-blue-50 min-h-screen">
+                <button
+                    onClick={handleBack}
+                    className="mb-4 bg-blue-100 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-200 transition flex items-center gap-2"
+                >
+                    <i className="fa-solid fa-arrow-left"></i>
+                    Back to Courses
+                </button>
                 <SearchBar
                     value={search}
                     onChange={setSearch}
