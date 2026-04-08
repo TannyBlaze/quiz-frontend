@@ -169,11 +169,11 @@ export default function CourseDetails() {
         <AuthGuard allowedRoles={["setter"]}>
             <div className="p-6 bg-blue-50 min-h-screen">
 
-                <div className="sticky top-16 z-50 bg-blue-50 border-b border-gray-200 rounded-full shadow-sm backdrop-blur px-6 py-3 flex flex-wrap justify-between items-center gap-3">
+                <div className="sticky top-16 z-50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 px-2 sm:px-0">
 
                     <button
                         onClick={handleBack}
-                        className="bg-blue-100 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-200 transition flex items-center gap-2"
+                        className="w-full sm:w-auto bg-blue-100 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-200 transition flex items-center justify-center gap-2"
                     >
                         <i className="fa-solid fa-arrow-left"></i>
                         Back to Courses
@@ -181,7 +181,7 @@ export default function CourseDetails() {
 
                     <button
                         onClick={saveChanges}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
+                        className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2"
                     >
                         <i className="fa-solid fa-floppy-disk"></i>
                         Save Changes
