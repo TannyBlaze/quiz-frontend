@@ -184,7 +184,7 @@ export default function AdminPage() {
                         <p>No users found</p>
                     </div>
                 ) : (
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
                             {users
                                 .filter((user) =>
                                     user.name.toLowerCase().includes(search.toLowerCase()) ||

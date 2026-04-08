@@ -61,7 +61,7 @@ export default function QuizPage() {
                         <p>No quizzes available yet</p>
                     </div>
                 ) : (
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
                             {courses
                                 .filter((course) =>
                                     course.title.toLowerCase().includes(search.toLowerCase())
