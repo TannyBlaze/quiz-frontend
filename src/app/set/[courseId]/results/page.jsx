@@ -39,13 +39,16 @@ export default function ResultsPage() {
     return (
         <AuthGuard allowedRoles={["setter"]}>
             <div className="p-6 bg-blue-50 min-h-screen">
-                <button
-                    onClick={handleBack}
-                    className="mb-4 bg-blue-100 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-200 transition flex items-center gap-2"
-                >
-                    <i className="fa-solid fa-arrow-left"></i>
-                    Back to Courses
-                </button>
+                <div className="sticky top-16 z-50 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 px-2 sm:px-0">
+
+                    <button
+                        onClick={handleBack}
+                        className="w-full sm:w-auto bg-blue-100 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-200 transition flex items-center justify-center gap-2"
+                    >
+                        <i className="fa-solid fa-arrow-left"></i>
+                        Back to Courses
+                    </button>
+                </div>
                 <SearchBar
                     value={search}
                     onChange={setSearch}
