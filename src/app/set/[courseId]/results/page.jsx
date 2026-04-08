@@ -14,6 +14,7 @@ export default function ResultsPage() {
     const [search, setSearch] = useState("");
     const router = useRouter();
     const [results, setResults] = useState([]);
+    const [sortBy, setSortBy] = useState("name");
 
     const handleBack = () => {
             router.push("/set");
@@ -50,6 +51,16 @@ export default function ResultsPage() {
                     onChange={setSearch}
                     placeholder="Search results..."
                 />
+                <div className="flex justify-end mb-4">
+                    <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value)}
+                        className="border p-2 rounded-lg bg-white text-sm"
+                    >
+                        <option value="name">Sort by Name</option>
+                        <option value="leaderboard">Sort by Leaderboard</option>
+                    </select>
+                </div>
                 <h1 className="text-2xl font-bold mb-6 text-blue-600 flex items-center gap-2">
                     <i className="fa-solid fa-chart-column"></i>
                     Results Overview
@@ -72,6 +83,15 @@ export default function ResultsPage() {
                                         r.score?.toString().includes(term) ||
                                         r.percentage?.toString().includes(term)
                                     );
+                                })
+                                .sort((a, b) => {
+                                    if (sortBy === "leaderboard") {
+                                        return b.percentage - a.percentage;
+                                    }
+
+                                    return (a.user || "")
+                                        .toLowerCase()
+                                        .localeCompare((b.user || "").toLowerCase());
                                 })
                                 .map((r, i) => {
                             const isGood = r.percentage >= 60;

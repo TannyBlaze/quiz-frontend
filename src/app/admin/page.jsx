@@ -190,6 +190,7 @@ export default function AdminPage() {
                                     user.name.toLowerCase().includes(search.toLowerCase()) ||
                                     user.email.toLowerCase().includes(search.toLowerCase())
                                 )
+                                .sort((a, b) => a.name.localeCompare(b.name))
                                 .map((user) => (
                             <div
                                 key={user._id}

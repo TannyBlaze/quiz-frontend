@@ -66,6 +66,9 @@ export default function QuizPage() {
                                 .filter((course) =>
                                     course.title.toLowerCase().includes(search.toLowerCase())
                                 )
+                                .sort((a, b) =>
+                                    a.title.toLowerCase().localeCompare(b.title.toLowerCase())
+                                )
                                 .map((course) => (
                             <div
                                 key={course._id}

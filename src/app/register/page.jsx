@@ -43,6 +43,8 @@ export default function Register() {
                 localStorage.setItem("token", res.token);
                 localStorage.setItem("user", JSON.stringify(res.user));
 
+                window.dispatchEvent(new Event("userChanged"));
+
                 showToast("Registered successfully", "success");
                 router.push("/quiz");
             } else {

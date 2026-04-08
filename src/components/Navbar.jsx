@@ -20,18 +20,31 @@ export default function Navbar() {
     }, []);
 
     useEffect(() => {
-        try {
-            const storedUser = localStorage.getItem("user");
+        const loadUser = () => {
+            try {
+                const storedUser = localStorage.getItem("user");
 
-            if (storedUser) {
-                const parsed = JSON.parse(storedUser);
-                setRole(parsed.role || null);
-                setUserName(parsed.name || "");
+                if (storedUser) {
+                    const parsed = JSON.parse(storedUser);
+                    setRole(parsed.role || null);
+                    setUserName(parsed.name || "");
+                } else {
+                    setRole(null);
+                    setUserName("");
+                }
+            } catch {
+                setRole(null);
+                setUserName("");
             }
-        } catch {
-            setRole(null);
-            setUserName("");
-        }
+        };
+
+        loadUser();
+
+        window.addEventListener("userChanged", loadUser);
+
+        return () => {
+            window.removeEventListener("userChanged", loadUser);
+        };
     }, []);
 
     if (!mounted) return null;
@@ -39,6 +52,12 @@ export default function Navbar() {
     const handleLogout = async () => {
         try {
             await logoutUser();
+
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+
+            window.dispatchEvent(new Event("userChanged"));
+
             showToast("Logged out successfully", "success");
         } catch {
             showToast("Logout failed", "error");

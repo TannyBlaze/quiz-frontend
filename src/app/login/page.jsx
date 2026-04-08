@@ -48,6 +48,7 @@ export default function Login() {
             if (res.token && res.user) {
                 localStorage.setItem("token", res.token);
                 localStorage.setItem("user", JSON.stringify(res.user));
+                window.dispatchEvent(new Event("userChanged"));
 
                 showToast("Login successful", "success");
                 redirectUser(res.user.role);
